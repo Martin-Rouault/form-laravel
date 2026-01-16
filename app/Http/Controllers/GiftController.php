@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gift;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class GiftController extends Controller
 {
@@ -36,7 +37,12 @@ class GiftController extends Controller
             'price'   => 'required|decimal:0,2|min:0',
         ]);
 
-        Gift::create($validatedData);
+        $gift = Gift::create($validatedData);
+
+        Mail::raw("Le cadeau {$gift->name} a bien été ajouté ({$gift->price}€)", function ($message) use ($gift) {
+            $message->to('martin.rlt92@gmail.com')
+                ->subject('Nouveau cadeau ajouté');
+        });
 
         return redirect()->route('gifts.index')->with('success', 'Cadeau ajouté avec succès !');
     }
