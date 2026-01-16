@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('gifts', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
-            $table->string('url');
-            $table->text('details');
+            $table->string('url')->nullable();
+            $table->text('details')->nullable();
             $table->decimal('price', 8, 2);
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExits('gifts');
     }
 };
